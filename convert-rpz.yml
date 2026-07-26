@@ -1,1 +1,38 @@
+name: Convert RPZ Database
 
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+
+    - name: Download RPZ binary
+      run: |
+        wget https://raw.githubusercontent.com/alsyundawy/TrustPositif-To-RPZ-Binary/main/bind/rpz
+        chmod +x rpz
+
+
+    - name: Download database
+      run: |
+        wget https://raw.githubusercontent.com/alsyundawy/TrustPositif-To-RPZ-Binary/main/rpz-komdigi-database \
+        -O database
+
+
+    - name: Generate zone
+      run: |
+        ./rpz database
+
+
+    - name: Check output
+      run: |
+        ls -la
